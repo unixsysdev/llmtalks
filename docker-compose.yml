@@ -1,0 +1,110 @@
+version: '3.8'
+
+services:
+  orchestrator:
+    build: .
+    image: multi_agent_framework:latest
+    container_name: redis_orchestrator
+    environment:
+      - CHUTES_API_TOKEN=${CHUTES_API_TOKEN}
+      - CHUTES_API_URL=${CHUTES_API_URL}
+      - MODEL_NAME=${MODEL_NAME}
+    volumes:
+      - ./shared:/app/shared
+      - ./orchestrator/logs:/app/orchestrator/logs
+      - ./orchestrator/solutions:/app/orchestrator/solutions
+      - ./.env:/app/.env
+    working_dir: /app
+    command: tail -f /dev/null
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent_network
+
+  agent-a:
+    image: multi_agent_framework:latest
+    container_name: redis_agent_a
+    environment:
+      - CHUTES_API_TOKEN=${CHUTES_API_TOKEN}
+      - CHUTES_API_URL=${CHUTES_API_URL}
+      - MODEL_NAME=${MODEL_NAME}
+    volumes:
+      - ./shared:/app/shared
+      - ./agent_a:/app/agent_a
+      - ./.env:/app/.env
+    working_dir: /app
+    command: python3 redis_agent_worker.py agent_a
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped
+
+  agent-b:
+    image: multi_agent_framework:latest
+    container_name: redis_agent_b
+    environment:
+      - CHUTES_API_TOKEN=${CHUTES_API_TOKEN}
+      - CHUTES_API_URL=${CHUTES_API_URL}
+      - MODEL_NAME=${MODEL_NAME}
+    volumes:
+      - ./shared:/app/shared
+      - ./agent_b:/app/agent_b
+      - ./.env:/app/.env
+    working_dir: /app
+    command: python3 redis_agent_worker.py agent_b
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped
+
+  agent-c:
+    image: multi_agent_framework:latest
+    container_name: redis_agent_c
+    environment:
+      - CHUTES_API_TOKEN=${CHUTES_API_TOKEN}
+      - CHUTES_API_URL=${CHUTES_API_URL}
+      - MODEL_NAME=${MODEL_NAME}
+    volumes:
+      - ./shared:/app/shared
+      - ./agent_c:/app/agent_c
+      - ./.env:/app/.env
+    working_dir: /app
+    command: python3 redis_agent_worker.py agent_c
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped
+
+  agent-d:
+    image: multi_agent_framework:latest
+    container_name: redis_agent_d
+    environment:
+      - CHUTES_API_TOKEN=${CHUTES_API_TOKEN}
+      - CHUTES_API_URL=${CHUTES_API_URL}
+      - MODEL_NAME=${MODEL_NAME}
+    volumes:
+      - ./shared:/app/shared
+      - ./agent_d:/app/agent_d
+      - ./.env:/app/.env
+    working_dir: /app
+    command: python3 redis_agent_worker.py agent_d
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - agent_network
+    depends_on:
+      - orchestrator
+    restart: unless-stopped
+
+networks:
+  agent_network:
+    driver: bridge

@@ -1,0 +1,10 @@
+iubuntu@instance-20250116-1717:/root/Workspace/deep_think$ claude mcp add-json qdrant-better '{"command":"sudo","args":["-u","ubuntu","npx","--yes","better-qdrant-mcp-server"],"env":{"QDRANT_URL":"http://localhost:6333","DEFAULT_EMBEDDING_SERVICE":"ollama","OLLAMA_ENDPOINT":"http://localhost:11434","OLLAMA_MODEL":"nomic-embed-text:latest"}}'
+Added stdio MCP server qdrant-better to local config
+ubuntu@instance-20250116-1717:/root/Workspace/deep_think$  claude mcp add --transport sse serena http://localhost:9121/sse
+Added SSE MCP server serena with URL: http://localhost:9121/sse to local config
+File modified: /home/ubuntu/.claude.json [project: /root/Workspace/deep_think]
+ubuntu@instance-20250116-1717:/root/Workspace/deep_think$  claude mcp add context7 -- npx -y @upstash/context7-mcp@latest
+Added stdio MCP server context7 with command: npx -y @upstash/context7-mcp@latest to local config
+File modified: /home/ubuntu/.claude.json [project: /root/Workspace/deep_think]
+ubuntu@instance-20250116-1717:/root/Workspace/deep_think$ claude mcp list
+
